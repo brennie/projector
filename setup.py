@@ -30,6 +30,7 @@ setup(
     packages=find_packages(exclude=['contrib', 'docs', 'test']),
     install_requires=[
         'click>=6,<7',
+        'ruamel.yaml',
     ],
     extras_require={
         'dev': [

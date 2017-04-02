@@ -18,8 +18,12 @@
 """The projector command-line interface."""
 
 from pathlib import Path
+from pprint import pprint
+from types import SimpleNamespace
 
 import click
+import ruamel.yaml as yaml
+from ruamel.yaml.error import YAMLError
 
 from projector import get_version_string
 
@@ -29,17 +33,39 @@ from projector import get_version_string
 @click.option('config_path', '-c', '--config', metavar='FILE', type=Path,
               default='~/.projector.yaml',
               help='The path to the configuration file.')
-def cli(config_path):
+@click.pass_context
+def cli(ctx, config_path):
     """Projector.
 
     A tool for managing multiple repositories and setting up development
     environments.
     """
-    raise NotImplementedError
+    config_path = config_path.expanduser().resolve()
+
+    ctx.obj = SimpleNamespace()
+    ctx.obj.config_path = config_path
+
+    try:
+        with open(config_path) as f:
+            ctx.obj.config = yaml.load(f, yaml.RoundTripLoader)
+    except IOError as e:
+        click.echo(f'projector: could not open "{config_path}": {e}', err=True)
+        raise SystemExit(1)
+    except YAMLError as e:
+        click.echo(f'projector: could not parse "{config_path}": {e}', err=True)
+        raise SystemExit(1)
+
+
+@cli.command('dump-config')
+@click.pass_context
+def dump_config(ctx):
+    """Dump configuration to standard output."""
+    pprint(ctx.obj.config)
 
 
 @cli.command()
-def sync():
+@click.pass_context
+def sync(ctx):
     """Synchronize project state.
 
     This command will fetch any unfetched repositories and create any uncreated
@@ -51,7 +77,8 @@ def sync():
 @cli.command('import')
 @click.argument('file_name', metavar='FILENAME', type=Path)
 @click.argument('project_name', metavar='[PROJECT]')
-def import_project():
+@click.pass_context
+def import_project(ctx):
     """Import project(s) from a configuration file.
 
     Unless a project name is specified, all projects from the configuration
@@ -64,7 +91,8 @@ def import_project():
 @click.argument('project_name', metavar='PROJECT')
 @click.option('output_file_name', '-o', metavar='FILE', type=Path,
               help='Output to specified file instead of standard output.')
-def export():
+@click.pass_context
+def export(ctx):
     """Export project(s) to a configuration file.
 
     By default this will write to standard output.
