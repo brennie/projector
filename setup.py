@@ -28,7 +28,9 @@ setup(
     ],
     keywords='development project repository setuptools',
     packages=find_packages(exclude=['contrib', 'docs', 'test']),
-    install_requires=[],
+    install_requires=[
+        'click>=6,<7',
+    ],
     extras_require={
         'dev': [
             'flake8',
@@ -36,6 +38,11 @@ setup(
             'flake8-commas',
             'flake8-docstrings',
             'wheel',
+        ],
+    },
+    entry_points={
+        'console_scripts': [
+            'projector = projector.cli:cli',
         ],
     },
 )
