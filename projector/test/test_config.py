@@ -49,6 +49,7 @@ def test_validate_config_valid():
         options:
           source_dir: ~/src
           project_dir: ~/projects
+          tools: {}
         repositories: {}
         projects: {}'''), yaml.RoundTripLoader)
 
@@ -97,6 +98,7 @@ def test_validate_config_unknown_key():
         options:
             source_dir: ~/src
             project_dir: ~/projects
+            tools: {}
         repositories: {}
         projects: {}
         unknown: foo
@@ -105,6 +107,7 @@ def test_validate_config_unknown_key():
         options:
             source_dir: ~/src
             project_dir: ~/projects
+            tools: {}
             unknown: foo
         repositories: {}
         projects: {}
@@ -117,3 +120,40 @@ def test_validate_config_unknown_key():
         with pytest.raises(ValidationError) as excinfo:
             validate_config(config)
         assert excinfo.value.code == 'unknown-key'
+
+
+def test_validate_config_unknown_tool():
+    """Testing validate_config with unknown build tool."""
+    config = yaml.load(_dedent('''\
+        ---
+        options:
+            source_dir: ~/src
+            project_dir: ~/projects
+            tools:
+                unknown_tool: {}
+        repositories: {}
+        projects: {}
+        '''), yaml.RoundTripLoader)
+
+    with pytest.raises(ValidationError) as excinfo:
+        validate_config(config)
+    assert excinfo.value.code == 'unknown-tool'
+
+
+def test_validate_config_python_tool_valid():
+    """Testing validate_config with a valid PythonTool configuration."""
+    config = yaml.load(_dedent('''\
+        ---
+        options:
+            source_dir: ~/src
+            project_dir: ~/projects
+            tools:
+                python:
+                    virtualenvs:
+                        venv2: {python: 2}
+                        venv3: {python: 3}
+        repositories: {}
+        projects: {}
+        '''), yaml.RoundTripLoader)
+
+    validate_config(config)

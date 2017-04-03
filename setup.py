@@ -46,5 +46,8 @@ setup(
         'console_scripts': [
             'projector = projector.cli:cli',
         ],
+        'projector.build_tools': [
+            'python = projector.build_tools.python:PythonBuildTool',
+        ],
     },
 )

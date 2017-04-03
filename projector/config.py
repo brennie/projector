@@ -23,9 +23,11 @@ from typing import Optional, Set
 
 from ruamel.yaml.comments import CommentedMap
 
+from projector.build_tools import get_build_tools
+
 
 _TOP_LEVEL_KEYS = {'options', 'repositories', 'projects'}
-_OPTIONS_KEYS = {'source_dir', 'project_dir'}
+_OPTIONS_KEYS = {'source_dir', 'project_dir', 'tools'}
 
 
 class ValidationError(Exception):
@@ -53,7 +55,25 @@ def validate_config(config: CommentedMap):
             Raised when the configuration is invalid.
     """
     _validate_keys(config, _TOP_LEVEL_KEYS)
-    _validate_keys(config['options'], _OPTIONS_KEYS, prefix='options.')
+
+    options = config['options']
+    _validate_keys(options, _OPTIONS_KEYS, prefix='options.')
+
+    tools = options.get('tools')
+    if tools:
+        configured_tools = set(tools)
+        build_tools = get_build_tools()
+
+        unknown_keys = configured_tools - {build_tool.name for build_tool in build_tools}
+
+        if unknown_keys:
+            key = unknown_keys.pop()
+            raise ValidationError(f'Unknown build tool: "{key}"',
+                                  code='unknown-tool')
+
+        for tool in get_build_tools():
+            if tool.name in tools:
+                tool.validate_options(tools[tool.name])
 
 
 def _validate_keys(mapping: CommentedMap, expected_keys: Set[str], *,
