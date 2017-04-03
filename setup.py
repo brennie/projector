@@ -38,6 +38,7 @@ setup(
             'flake8-bugbear',
             'flake8-commas',
             'flake8-docstrings',
+            'pytest',
             'wheel',
         ],
     },

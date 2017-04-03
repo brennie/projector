@@ -26,6 +26,7 @@ import ruamel.yaml as yaml
 from ruamel.yaml.error import YAMLError
 
 from projector import get_version_string
+from projector.config import ValidationError, validate_config
 
 
 @click.group('projector')
@@ -47,13 +48,21 @@ def cli(ctx, config_path):
 
     try:
         with open(config_path) as f:
-            ctx.obj.config = yaml.load(f, yaml.RoundTripLoader)
+            config = yaml.load(f, yaml.RoundTripLoader)
     except IOError as e:
         click.echo(f'projector: could not open "{config_path}": {e}', err=True)
         raise SystemExit(1)
     except YAMLError as e:
         click.echo(f'projector: could not parse "{config_path}": {e}', err=True)
         raise SystemExit(1)
+
+    try:
+        validate_config(config)
+    except ValidationError as e:
+        click.echo(f'projector: could not parse "{config_path}": {e}', err=True)
+        raise SystemExit(1)
+
+    ctx.obj.config = config
 
 
 @cli.command('dump-config')
