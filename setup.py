@@ -31,6 +31,7 @@ setup(
     install_requires=[
         'click>=6,<7',
         'ruamel.yaml',
+        'voluptuous',
     ],
     extras_require={
         'dev': [

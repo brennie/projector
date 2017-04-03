@@ -17,31 +17,10 @@
 
 """Projector configuration validation."""
 
-from functools import partial
-from operator import add
-from typing import Optional, Set
-
 from ruamel.yaml.comments import CommentedMap
+from voluptuous import All, Length, Required, Schema
 
 from projector.build_tools import get_build_tools
-
-
-_TOP_LEVEL_KEYS = {'options', 'repositories', 'projects'}
-_OPTIONS_KEYS = {'source_dir', 'project_dir', 'tools'}
-
-
-class ValidationError(Exception):
-    """An error that occurs with configuration validation."""
-
-    def __init__(self, msg: str, code: Optional[str]):
-        """Initialize the error.
-
-        Args:
-            msg: The exception message.
-            code: A unique exception code.
-        """
-        super().__init__(msg)
-        self.code = code
 
 
 def validate_config(config: CommentedMap):
@@ -51,54 +30,21 @@ def validate_config(config: CommentedMap):
         config: The configuration to validate.
 
     Raises:
-        ValidationError:
+        voluptuous.error.Invalid:
             Raised when the configuration is invalid.
     """
-    _validate_keys(config, _TOP_LEVEL_KEYS)
+    schema = Schema({
+        Required('options'): {
+            Required('project_dir'): All(str, Length(min=1)),
+            Required('source_dir'): All(str, Length(min=1)),
+            'tools': {
+                tool.name: tool.options_schema
+                for tool in get_build_tools()
+                if tool.options_schema is not None
+            },
+        },
+        Required('repositories'): {},
+        Required('projects'): {},
+    })
 
-    options = config['options']
-    _validate_keys(options, _OPTIONS_KEYS, prefix='options.')
-
-    tools = options.get('tools')
-    if tools:
-        configured_tools = set(tools)
-        build_tools = get_build_tools()
-
-        unknown_keys = configured_tools - {build_tool.name for build_tool in build_tools}
-
-        if unknown_keys:
-            key = unknown_keys.pop()
-            raise ValidationError(f'Unknown build tool: "{key}"',
-                                  code='unknown-tool')
-
-        for tool in get_build_tools():
-            if tool.name in tools:
-                tool.validate_options(tools[tool.name])
-
-
-def _validate_keys(mapping: CommentedMap, expected_keys: Set[str], *,
-                   prefix: Optional[str]=None):
-    """Validate that the keys present in the mapping are all expected and that none are missing.
-
-    Args:
-        mapping: The mapping to validate.
-        expected_keys: The set of expected keys. All must be present in the mapping.
-
-    """
-    keys = set(mapping)
-    missing_keys = expected_keys - keys
-    unknown_keys = keys - expected_keys
-
-    if unknown_keys:
-        key = unknown_keys.pop()
-        if prefix:
-            key = f'{prefix}{key}'
-
-        raise ValidationError(f'Unknown key "{key}"', code='unknown-key')
-
-    if missing_keys:
-        if not prefix:
-            prefix = ''
-        missing_keys = ', '.join(map(partial(add, prefix), missing_keys))
-        raise ValidationError(f'Expected keys {missing_keys} were missing.',
-                              code='missing-key')
+    schema(config)

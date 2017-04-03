@@ -21,10 +21,11 @@ from functools import partial
 from itertools import takewhile
 from operator import eq
 
-import ruamel.yaml as yaml
 import pytest
+import ruamel.yaml as yaml
+import voluptuous.error
 
-from projector.config import ValidationError, validate_config
+from projector.config import validate_config
 
 
 def _dedent(s: str) -> str:
@@ -85,9 +86,11 @@ def test_validate_config_missing_key():
     for config in configs:
         config = yaml.load(config, yaml.RoundTripLoader)
 
-        with pytest.raises(ValidationError) as excinfo:
+        with pytest.raises(voluptuous.error.MultipleInvalid) as excinfo:
             validate_config(config)
-        assert excinfo.value.code == 'missing-key'
+
+        for e in excinfo.value.errors:
+            assert isinstance(e, voluptuous.error.RequiredFieldInvalid)
 
 
 def test_validate_config_unknown_key():
@@ -117,9 +120,8 @@ def test_validate_config_unknown_key():
     for config in configs:
         config = yaml.load(config, yaml.RoundTripLoader)
 
-        with pytest.raises(ValidationError) as excinfo:
+        with pytest.raises(voluptuous.error.MultipleInvalid):
             validate_config(config)
-        assert excinfo.value.code == 'unknown-key'
 
 
 def test_validate_config_unknown_tool():
@@ -135,9 +137,8 @@ def test_validate_config_unknown_tool():
         projects: {}
         '''), yaml.RoundTripLoader)
 
-    with pytest.raises(ValidationError) as excinfo:
+    with pytest.raises(voluptuous.error.MultipleInvalid):
         validate_config(config)
-    assert excinfo.value.code == 'unknown-tool'
 
 
 def test_validate_config_python_tool_valid():
@@ -150,8 +151,8 @@ def test_validate_config_python_tool_valid():
             tools:
                 python:
                     virtualenvs:
-                        venv2: {python: 2}
-                        venv3: {python: 3}
+                        venv2: {python: '2'}
+                        venv3: {python: '3'}
         repositories: {}
         projects: {}
         '''), yaml.RoundTripLoader)

@@ -23,10 +23,11 @@ from types import SimpleNamespace
 
 import click
 import ruamel.yaml as yaml
+import voluptuous.error
 from ruamel.yaml.error import YAMLError
 
 from projector import get_version_string
-from projector.config import ValidationError, validate_config
+from projector.config import validate_config
 
 
 @click.group('projector')
@@ -58,7 +59,7 @@ def cli(ctx, config_path):
 
     try:
         validate_config(config)
-    except ValidationError as e:
+    except voluptuous.error.Invalid as e:
         click.echo(f'projector: could not parse "{config_path}": {e}', err=True)
         raise SystemExit(1)
 

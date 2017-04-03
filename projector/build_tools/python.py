@@ -17,10 +17,9 @@
 
 """Python build tool."""
 
-from ruamel.yaml.comments import CommentedMap
+from voluptuous import Required
 
 from projector.build_tools.base import BuildTool
-from projector.config import ValidationError
 
 
 class PythonBuildTool(BuildTool):
@@ -31,37 +30,8 @@ class PythonBuildTool(BuildTool):
 
     name = 'python'
 
-    @classmethod
-    def validate_options(cls, options: CommentedMap):
-        """Validate the Python build tool options."""
-        unknown_keys = set(options) - {'virtualenvs'}
-
-        if unknown_keys:
-            key = unknown_keys.pop()
-            raise ValidationError(f'Unknown key "options.tools.python.{key}".',
-                                  code='unknown-key')
-
-        virtualenvs = options.get('virtualenvs')
-
-        if virtualenvs:
-            if not isinstance(virtualenvs, CommentedMap):
-                raise ValidationError('Key "options.tools.python.virtualenvs" should be a map.',
-                                      code='invalid-key')
-
-            for venv_name, venv_options in virtualenvs.items():
-                if not isinstance(venv_options, CommentedMap):
-                    raise ValidationError(f'Key "options.tools.python.virtualenvs.{venv_name}" should be a map.',
-                                          code='invalid-key')
-
-                unknown_keys = set(venv_options) - {'python'}
-
-                if unknown_keys:
-                    key = unknown_keys.pop()
-                    raise ValidationError(f'Unknown key "options.tools.python.{venv_name}.{key}".',
-                                          code='unknown-key')
-
-                python_version = venv_options.get('python')
-
-                if not python_version:
-                    raise ValidationError(f'Expected key "options.tools.python.{venv_name}.python was missing.',
-                                          code='missing-key')
+    options_schema = {
+        'virtualenvs': {
+            str: {Required('python'): str},
+        },
+    }

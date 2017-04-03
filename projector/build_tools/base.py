@@ -28,15 +28,4 @@ class BuildTool:
     #: This must be unique.
     tool_name = None
 
-    @classmethod
-    def validate_options(cls, options: CommentedMap):
-        """Validate the options.
-
-        Args:
-            options: The build tool-specific options.
-
-        Raises:
-            projector.config.ValidationError:
-                Raised when the configuration is invalid.
-        """
-        pass
+    options_schema = None
