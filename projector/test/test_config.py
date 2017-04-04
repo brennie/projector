@@ -181,3 +181,40 @@ def test_validate_config_python_tool_invalid_numeric_version():
 
     for error in excinfo.value.errors:
         assert isinstance(error, voluptuous.error.TypeInvalid)
+
+
+def test_validate_config_invalid_repo_scm():
+    """Testing validate_config with an invalid repository SCM tool."""
+    config = yaml.load(_dedent('''\
+        ---
+        options:
+          source_dir: ~/src
+          project_dir: ~/projects
+        repositories:
+          repo1:
+            scm: invalid
+        '''), yaml.RoundTripLoader)
+
+    with pytest.raises(voluptuous.error.MultipleInvalid):
+        validate_config(config)
+
+
+def test_validate_config_repo_git_scm():
+    """Testing validate_config with a valid git repository configuration."""
+    config = yaml.load(_dedent('''\
+        ---
+        options:
+          source_dir: ~/src
+          project_dir: ~/projects
+        repositories:
+          repo1:
+            scm: git
+            url: ssh://git@example.com:foo/bar.git
+            ref: development
+            detach: true
+            remotes:
+              clone: ssh://git@example.com:foo-clone/bar.git
+        projects: {}
+        '''), yaml.RoundTripLoader)
+
+    validate_config(config)

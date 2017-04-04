@@ -50,5 +50,8 @@ setup(
         'projector.build_tools': [
             'python = projector.build_tools.python:PythonBuildTool',
         ],
+        'projector.scm_tools': [
+            'git = projector.scm_tools.git:GitSCMTool',
+        ],
     },
 )

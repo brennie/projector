@@ -15,19 +15,22 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-"""Projector build tool base class."""
+"""Base SCM tool definition."""
 
 from typing import Any, Dict, Union
 
 from voluptuous import Schema
 
 
-class BuildTool:
-    """The base build tool class."""
+class SCMTool:
+    """The abstract base class for SCMTools.
 
-    #: The build tool name.
-    #:
-    #: This must be unique.
+    Subclasses of this represent a specific SCM tool such as :py:class:`git
+    <projector.scm_tools.git:GitSCMTool>`.
+    """
+
+    #: The name of the tool.
     name: str = None
 
-    options_schema: Union[Dict[Any, Any], Schema] = None
+    #: The schema for repository entries.
+    repository_schema: Union[Dict[Any, Any], Schema] = None

@@ -15,19 +15,28 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-"""Projector build tool base class."""
+"""SCM tools that projector supports."""
 
-from typing import Any, Dict, Union
+from functools import lru_cache
+from pkg_resources import iter_entry_points
+from typing import Dict
 
-from voluptuous import Schema
+from projector.scm_tools.base import SCMTool
 
 
-class BuildTool:
-    """The base build tool class."""
+@lru_cache(None)
+def get_scm_tools() -> Dict[str, SCMTool]:
+    """Return the registered SCM tools.
 
-    #: The build tool name.
-    #:
-    #: This must be unique.
-    name: str = None
+    Build tools are registered with the ``projector.scm_tools`` entry point.
 
-    options_schema: Union[Dict[Any, Any], Schema] = None
+    Returns:
+        The registered SCM tools.
+    """
+    return {
+        tool.name: tool
+        for tool in (
+            entry_point.load()
+            for entry_point in iter_entry_points(group='projector.scm_tools')
+        )
+    }

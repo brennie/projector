@@ -15,19 +15,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-"""Projector build tool base class."""
+"""Git SCM tool defintion."""
 
-from typing import Any, Dict, Union
+from voluptuous import All, Length, Required, Url
 
-from voluptuous import Schema
+from projector.scm_tools.base import SCMTool
 
 
-class BuildTool:
-    """The base build tool class."""
+class GitSCMTool(SCMTool):
+    """The Git SCM tool."""
 
-    #: The build tool name.
-    #:
-    #: This must be unique.
-    name: str = None
+    name = 'git'
 
-    options_schema: Union[Dict[Any, Any], Schema] = None
+    repository_schema = {
+        Required('url'): Url(),
+        'ref': str,
+        'detach': bool,
+        'remotes': All(Length(min=1), {
+            str: Url(),
+        }),
+    }
