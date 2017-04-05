@@ -48,7 +48,7 @@ def cli(ctx, config_path):
     ctx.obj.config_path = config_path
 
     try:
-        with open(config_path) as f:
+        with config_path.open() as f:
             config = yaml.load(f, yaml.RoundTripLoader)
     except IOError as e:
         click.echo(f'projector: could not open "{config_path}": {e}', err=True)
