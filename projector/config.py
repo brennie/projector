@@ -18,10 +18,10 @@
 """Projector configuration validation."""
 
 from copy import copy
+from typing import Any, Dict
 
 import voluptuous
 import voluptuous.error
-from ruamel.yaml.comments import CommentedMap
 from voluptuous import All, Length, Required, Schema
 
 from projector.build_tools import get_build_tools
@@ -48,7 +48,7 @@ def _validate_scm(scm_name: str) -> str:
     return scm_name
 
 
-def _validate_repository(repo: CommentedMap) -> CommentedMap:
+def _validate_repository(repo: Dict[str, Any]) -> Dict[str, Any]:
     """Validate a repository entry.
 
     Args:
@@ -92,7 +92,7 @@ _schema = Schema({
 })
 
 
-def validate_config(config: CommentedMap):
+def validate_config(config: Dict[str, Any]):
     """Validate the configuration.
 
     Args:
