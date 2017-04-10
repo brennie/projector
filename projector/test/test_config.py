@@ -24,6 +24,7 @@ from operator import eq
 import pytest
 import ruamel.yaml as yaml
 import voluptuous.error
+from more_itertools import ilen
 
 from projector.config import validate_config
 
@@ -36,10 +37,7 @@ def _dedent(s: str) -> str:
     """
     lines = s.splitlines(keepends=True)
     leading_spaces = takewhile(partial(eq, ' '), lines[0])
-
-    # We can't directly take the length of the generator and converting to a
-    # list will waste memory unnecessarily.
-    dedent = sum(1 for _ in leading_spaces)
+    dedent = ilen(leading_spaces)
     return ''.join(line[dedent:] for line in lines)
 
 
