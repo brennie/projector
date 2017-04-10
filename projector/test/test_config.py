@@ -47,10 +47,9 @@ def test_validate_config_valid():
     """Testing validate_config with a valid configuration."""
     config = yaml.load(_dedent('''\
         ---
-        options:
-          source_dir: ~/src
-          project_dir: ~/projects
-          tools: {}
+        source_dir: ~/src
+        project_dir: ~/projects
+        tools: {}
         repositories: {}
         projects: {}'''), yaml.RoundTripLoader)
 
@@ -62,12 +61,13 @@ def test_validate_config_missing_key():
     configs = map(_dedent, (
         '''\
         ---
-        options: {}
+        project_dir: ~/projects
+        source_dir: ~/src
         repositories: {}
         ''',
         '''\
         ---
-        options: {}
+        source_dir: ~/src
         projects: {}
         ''',
         '''\
@@ -77,7 +77,7 @@ def test_validate_config_missing_key():
         ''',
         '''\
         ---
-        options: {}
+        project_dir: ~/projects
         repositories: {}
         projects: {}
         ''',
@@ -95,44 +95,29 @@ def test_validate_config_missing_key():
 
 def test_validate_config_unknown_key():
     """Testing validate_config with unknown keys."""
-    configs = map(_dedent, (
+    config = yaml.load(_dedent(
         '''\
         ---
-        options:
-          source_dir: ~/src
-          project_dir: ~/projects
-          tools: {}
+        source_dir: ~/src
+        project_dir: ~/projects
+        tools: {}
         repositories: {}
         projects: {}
         unknown: foo
-        ''',
-        '''\
-        options:
-          source_dir: ~/src
-          project_dir: ~/projects
-          tools: {}
-          unknown: foo
-        repositories: {}
-        projects: {}
-        ''',
-    ))
+        '''), yaml.RoundTripLoader)
 
-    for config in configs:
-        config = yaml.load(config, yaml.RoundTripLoader)
-
-        with pytest.raises(voluptuous.error.MultipleInvalid):
-            validate_config(config)
+    with pytest.raises(voluptuous.error.MultipleInvalid):
+        validate_config(config)
 
 
 def test_validate_config_unknown_tool():
     """Testing validate_config with unknown build tool."""
     config = yaml.load(_dedent('''\
         ---
-        options:
-          source_dir: ~/src
-          project_dir: ~/projects
-          tools:
-            unknown_tool: {}
+        source_dir: ~/src
+        project_dir: ~/projects
+        tools:
+          unknown_tool: {}
         repositories: {}
         projects: {}
         '''), yaml.RoundTripLoader)
@@ -145,14 +130,13 @@ def test_validate_config_python_tool_valid():
     """Testing validate_config with a valid PythonTool configuration."""
     config = yaml.load(_dedent('''\
         ---
-        options:
-          source_dir: ~/src
-          project_dir: ~/projects
-          tools:
-            python:
-              virtualenvs:
-                venv2: {python: '2'}
-                venv3: {python: '3'}
+        source_dir: ~/src
+        project_dir: ~/projects
+        tools:
+          python:
+            virtualenvs:
+              venv2: {python: '2'}
+              venv3: {python: '3'}
         repositories: {}
         projects: {}
         '''), yaml.RoundTripLoader)
@@ -164,14 +148,13 @@ def test_validate_config_python_tool_invalid_numeric_version():
     """Testing validate_config with an invalid PythonTool configuration with numeric point Python versions."""
     config = yaml.load(_dedent('''\
         ---
-        options:
-          source_dir: ~/src
-          project_dir: ~/projects
-          tools:
-            python:
-              virtualenvs:
-                venv2: {python: 2}
-                venv3: {python: 3.4}
+        source_dir: ~/src
+        project_dir: ~/projects
+        tools:
+          python:
+            virtualenvs:
+              venv2: {python: 2}
+              venv3: {python: 3.4}
         repositories: {}
         projects: {}
         '''), yaml.RoundTripLoader)
@@ -187,9 +170,8 @@ def test_validate_config_invalid_repo_scm():
     """Testing validate_config with an invalid repository SCM tool."""
     config = yaml.load(_dedent('''\
         ---
-        options:
-          source_dir: ~/src
-          project_dir: ~/projects
+        source_dir: ~/src
+        project_dir: ~/projects
         repositories:
           repo1:
             scm: invalid
@@ -203,9 +185,8 @@ def test_validate_config_repo_git_scm():
     """Testing validate_config with a valid git repository configuration."""
     config = yaml.load(_dedent('''\
         ---
-        options:
-          source_dir: ~/src
-          project_dir: ~/projects
+        source_dir: ~/src
+        project_dir: ~/projects
         repositories:
           repo1:
             scm: git

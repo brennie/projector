@@ -72,14 +72,12 @@ def _validate_repository(repo: Dict[str, Any]) -> Dict[str, Any]:
 
 
 _schema = Schema({
-    Required('options'): {
-        Required('project_dir'): All(str, Length(min=1)),
-        Required('source_dir'): All(str, Length(min=1)),
-        'tools': {
-            tool.name: tool.options_schema
-            for tool in get_build_tools()
-            if tool.options_schema is not None
-        },
+    Required('project_dir'): All(str, Length(min=1)),
+    Required('source_dir'): All(str, Length(min=1)),
+    'tools': {
+        tool.name: tool.options_schema
+        for tool in get_build_tools()
+        if tool.options_schema is not None
     },
     Required('repositories'): {
         str: All(
