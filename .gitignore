@@ -1,0 +1,12 @@
+# Python packaging directories.
+*.egg-info/
+.cache/
+__pycache__/
+build/
+dist/
+
+# Sphinx generated autosummary documents.
+docs/coderef/python/
+
+# Python object files.
+*.py[co]
