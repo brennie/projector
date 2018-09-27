@@ -179,12 +179,12 @@ epub_exclude_files = ["search.html"]
 
 
 # -- Extension configuration -------------------------------------------------
-autoclass_content = 'class'
+autoclass_content = "class"
 
 autodoc_default_options = {
-    'members': None,
-    'member-order': 'bysource',
-    'special-members': '__init__',
+    "members": None,
+    "member-order": "bysource",
+    "special-members": "__init__",
 }
 
 autosummary_generate = True
