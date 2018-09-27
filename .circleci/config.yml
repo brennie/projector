@@ -1,0 +1,135 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.7
+    working_directory: ~/src/
+    steps:
+      - checkout
+      - run:
+          name: Install pipenv
+          command: pip install --user pipenv
+      - run:
+          name: Create virtualenv, install dependencies
+          command: pipenv install --dev
+      - run:
+          name: Test
+          command: pipenv run pytest --verbose
+  lint:
+    docker:
+      - image: circleci/python:3.7
+    working_directory: ~/src/
+    steps:
+      - checkout
+      - run:
+          name: Install pipenv
+          command: pip install --user pipenv
+      - run:
+          name: Create virtualenv, install dependencies
+          command: pipenv install --dev
+      - run:
+          name: Lint (flake8)
+          when: always
+          command: pipenv run flake8 projector/
+      - run:
+          name: Lint (black)
+          when: always
+          command: |
+            pipenv run black --diff --quiet . | tee .black-output
+
+            LINES=$(wc -l <.black-output)
+
+            if (( $LINES != 0 )); then
+              exit 1
+            fi
+
+  build-docs:
+    docker:
+      - image: circleci/python:3.7
+    working_directory: ~/src/
+    steps:
+      - checkout
+      - run:
+          name: Install pipenv
+          command: pip install --user pipenv
+      - run:
+          name: Create virtualenv, install dependencies
+          command: pipenv install --dev
+      - run:
+          name: Build documentation
+          command: pipenv run python setup.py build_sphinx
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build/sphinx/html
+
+  deploy-docs:
+    docker:
+      - image: debian:buster-slim
+    working_directory: ~/src/
+    steps:
+      - run:
+          name: Install dependencies
+          command: |
+            apt-get update
+            apt-get install -y ca-certificates git ssh
+      - run:
+          name: Configure Git
+          command: |
+            git config --global user.name CircleCI
+            git config --global user.email deploy@brennie.ca
+      - add_ssh_keys
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Deploy
+          command: |
+            # Copy over our CircleCI configuration so that we control what CircleCI does in
+            # response to the pushed gh-pages branch.
+            mkdir -p build/sphinx/html/.circleci
+            cp .circleci/config.yml build/sphinx/html/.circleci/config.yml
+
+            # Commit everything as our deploy user.
+            git add -f build/sphinx/html
+            git commit -m "Build documentation for ${CIRCLE_SHA1}"
+
+            # Create a new branch named `gh-pages` rooted at `build/sphinx/html` and deploy.
+            git subtree split --prefix=build/sphinx/html -b gh-pages
+            git push -f origin gh-pages:gh-pages
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build:
+          # Do not trigger builds on the gh-pages branch since it contains only documentation.
+          filters:
+            branches:
+              ignore:
+                - gh-pages
+
+      - lint:
+          # Likewise for linting.
+          filters:
+            branches:
+              ignore:
+                - gh-pages
+
+      - build-docs:
+          filters:
+            branches:
+              ignore:
+                - gh-pages
+
+      - deploy-docs:
+          # Only deploy docs when the build + test passes. Don't let linting stop a docs deploy.
+          requires:
+            - build
+            - build-docs
+
+          filters:
+            branches:
+              only:
+                - master

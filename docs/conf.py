@@ -47,6 +47,9 @@ extensions = [
     "sphinx.ext.napoleon",
 ]
 
+if os.getenv("CI") is not None:
+    extensions.append("sphinx.ext.githubpages")
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 
