@@ -28,7 +28,7 @@ with readme_path.open() as f:
 
 setup(
     name="projector",
-    decription="A tool for managing repositories and setting up development environments.",
+    description="A tool for managing repositories and setting up development environments.",
     long_description=long_description,
     long_description_content_type="text/x-rst",
     version=projector.__version__,
