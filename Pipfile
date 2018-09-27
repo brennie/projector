@@ -9,6 +9,7 @@ projector = {editable = true, path = "."}
 [dev-packages]
 black = "==18.6b4"
 "flake8" = ">=3.5.0,<4.0"
+pytest = ">=3.8.1,<3.9"
 sphinx = ">=1.8.1,<2.0"
 
 [requires]

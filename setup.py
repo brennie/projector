@@ -44,6 +44,7 @@ setup(
         "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
         "Programming Language :: Python :: 3.7",
     ],
+    install_requires=["marshmallow == 3.0.0b16"],
     project_urls={
         "Source": "https://github.com/brennie/projector",
         "Issues": "https://github.com/brennie/projector/issues",
