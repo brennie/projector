@@ -17,21 +17,10 @@
 
 """Projector configuration."""
 
-from pathlib import Path
-
 from marshmallow import Schema, ValidationError, fields, validates_schema
 
+from projector.fields import PathField
 from projector.scm_tools import get_scm_tools
-
-
-class PathField(fields.String):
-    """A field that deserializes into a :py:class:`~pathlib.path`."""
-
-    def _deserialize(self, value, attr, obj) -> Path:
-        return Path(super()._deserialize(value, attr, obj))
-
-    def _serialize(self, value, attr, obj) -> str:
-        return super()._serialize(str(value), attr, obj)
 
 
 class DirectoriesSchema(Schema):

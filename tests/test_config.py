@@ -24,7 +24,7 @@ from kgb import spy_on
 from marshmallow import ValidationError
 
 from projector.config import ConfigSchema
-from projector.scm_tools.git import Git
+from projector.scm_tools.git import Git, Remote, RemoteKind
 from projector.scm_tools import _get_scm_tools_uncached, get_scm_tools
 
 
@@ -96,10 +96,13 @@ def test_config_schema():
                             "ref": "master",
                             "detach": False,
                             "remotes": {
-                                "origin": {
-                                    "url": "git@github.com:brennie/projector.git",
-                                    "default": True,
-                                }
+                                "origin": Remote(
+                                    kind=RemoteKind.EXPLICIT,
+                                    inner={
+                                        "url": "git@github.com:brennie/projector.git",
+                                        "default": True,
+                                    },
+                                )
                             },
                         },
                     }

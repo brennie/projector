@@ -20,7 +20,7 @@
 import pytest
 from marshmallow import ValidationError
 
-from projector.scm_tools.git import GitRepositorySchema
+from projector.scm_tools.git import GitRepositorySchema, Remote, RemoteKind
 
 
 def test_git_repository_schema():
@@ -29,7 +29,12 @@ def test_git_repository_schema():
     assert schema.load({"remotes": {"origin": {"url": "https://example.com/foo.git"}}}) == {
         "ref": "master",
         "detach": False,
-        "remotes": {"origin": {"url": "https://example.com/foo.git", "default": True}},
+        "remotes": {
+            "origin": Remote(
+                kind=RemoteKind.EXPLICIT,
+                inner={"url": "https://example.com/foo.git", "default": True},
+            )
+        },
     }
 
     assert schema.load(
@@ -43,15 +48,26 @@ def test_git_repository_schema():
         "ref": "master",
         "detach": False,
         "remotes": {
-            "origin": {"url": "https://example.com/foo.git", "default": True},
-            "fork": {"url": "http://example.com/bar.git", "default": False},
+            "origin": Remote(
+                kind=RemoteKind.EXPLICIT,
+                inner={"url": "https://example.com/foo.git", "default": True},
+            ),
+            "fork": Remote(
+                kind=RemoteKind.EXPLICIT,
+                inner={"url": "http://example.com/bar.git", "default": False},
+            ),
         },
     }
 
     assert schema.load({"remotes": {"my-remote": {"url": "https://example.com/bar.git"}}}) == {
         "ref": "master",
         "detach": False,
-        "remotes": {"my-remote": {"url": "https://example.com/bar.git", "default": True}},
+        "remotes": {
+            "my-remote": Remote(
+                kind=RemoteKind.EXPLICIT,
+                inner={"url": "https://example.com/bar.git", "default": True},
+            )
+        },
     }
 
     assert schema.load(
@@ -65,8 +81,14 @@ def test_git_repository_schema():
         "ref": "master",
         "detach": False,
         "remotes": {
-            "origin": {"url": "https://example.com/foo.git", "default": False},
-            "fork": {"url": "http://example.com/bar.git", "default": True},
+            "origin": Remote(
+                kind=RemoteKind.EXPLICIT,
+                inner={"url": "https://example.com/foo.git", "default": False},
+            ),
+            "fork": Remote(
+                kind=RemoteKind.EXPLICIT,
+                inner={"url": "http://example.com/bar.git", "default": True},
+            ),
         },
     }
 
@@ -79,7 +101,24 @@ def test_git_repository_schema():
     ) == {
         "ref": "release-1.x",
         "detach": True,
-        "remotes": {"origin": {"url": "git@example.com:foo.git", "default": True}},
+        "remotes": {
+            "origin": Remote(
+                kind=RemoteKind.EXPLICIT, inner={"url": "git@example.com:foo.git", "default": True}
+            )
+        },
+    }
+
+    assert schema.load(
+        {"remotes": {"origin": "git@example.com:foo.git", "fork": "git@example.com:fork.git"}}
+    ) == {
+        "ref": "master",
+        "detach": False,
+        "remotes": {
+            "origin": Remote(
+                kind=RemoteKind.IMPLICIT, inner="git@example.com:foo.git", _default=True
+            ),
+            "fork": Remote(kind=RemoteKind.IMPLICIT, inner="git@example.com:fork.git"),
+        },
     }
 
     with pytest.raises(ValidationError) as excinfo:
@@ -88,7 +127,7 @@ def test_git_repository_schema():
 
     with pytest.raises(ValidationError) as excinfo:
         schema.load({"remotes": {}})
-    assert excinfo.value.messages == {"_schema": ["Repository has no remotes."]}
+    assert excinfo.value.messages == {"remotes": ["Repository has no remotes."]}
 
     with pytest.raises(ValidationError) as excinfo:
         schema.load(
@@ -99,7 +138,7 @@ def test_git_repository_schema():
                 }
             }
         )
-    assert excinfo.value.messages == {"_schema": ["Repository has no default remote."]}
+    assert excinfo.value.messages == {"remotes": ["Repository has no default remote."]}
 
     with pytest.raises(ValidationError) as excinfo:
         schema.load(
@@ -111,7 +150,7 @@ def test_git_repository_schema():
             }
         )
     assert excinfo.value.messages == {
-        "_schema": ["A repository cannot have multiple default remotes."]
+        "remotes": ["A repository cannot have multiple default remotes."]
     }
 
     with pytest.raises(ValidationError) as excinfo:
