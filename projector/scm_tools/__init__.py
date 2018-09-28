@@ -24,6 +24,20 @@ from typing import Dict
 from projector.scm_tools.base import ScmTool
 
 
+# This really only exists so we can spy on it with kgb.
+#
+# We cannot spy on `get_scm_tools` becuase some Python dsitributions have a native module for the
+# wrapper that lru_cache uses to wrap functions. This wrapper is not a proper function, but a C
+# object.
+def _get_scm_tools_uncached() -> Dict[str, ScmTool]:
+    return {
+        tool.name: tool
+        for tool in (
+            entry_point.load() for entry_point in iter_entry_points("projector.scm_tools")
+        )
+    }
+
+
 @lru_cache(None)
 def get_scm_tools() -> Dict[str, ScmTool]:
     """Return registered SCM Tools.
@@ -34,9 +48,4 @@ def get_scm_tools() -> Dict[str, ScmTool]:
     Returns:
         The registered SCM tools.
     """
-    return {
-        tool.name: tool
-        for tool in (
-            entry_point.load() for entry_point in iter_entry_points("projector.scm_tools")
-        )
-    }
+    return _get_scm_tools_uncached()

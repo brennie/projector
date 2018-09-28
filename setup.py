@@ -45,6 +45,11 @@ setup(
         "Programming Language :: Python :: 3.7",
     ],
     install_requires=["marshmallow == 3.0.0b16"],
+    entry_points={
+        "projector.scm_tools": [
+            "Git = projector.scm_tools.git.Git",
+        ],
+    },
     project_urls={
         "Source": "https://github.com/brennie/projector",
         "Issues": "https://github.com/brennie/projector/issues",
