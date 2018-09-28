@@ -2,8 +2,12 @@
 Projector
 =========
 
-Projector is a tool for managing repositories and setting up development
-environments.
+Projector takes the overhead out of managing your repositories and development environments.
+
+With projector you specify a declarative configuration of your development environments and
+the repositories they depend on and the tool takes care of the rest. In the future, Projector
+will support easy export and import of development environments so that your colleauges can get
+started hacking quickly.
 
 Development
 ===========
@@ -12,9 +16,8 @@ Development
 
     pipenv install --dev
 
-This will create the virtual environment and install all required development
-packages. See the |pipenv|_ documentation or run ``pipenv --help`` for more
-information on working with |pipenv|_.
+This will create the virtual environment and install all required development packages. See the
+|pipenv|_ documentation or run ``pipenv --help`` for more information on working with |pipenv|_.
 
 
 Building Documentation
