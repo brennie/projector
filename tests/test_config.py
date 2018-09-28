@@ -17,6 +17,8 @@
 
 """Tests for projector.config."""
 
+from pathlib import Path
+
 import pytest
 from kgb import spy_on
 from marshmallow import ValidationError
@@ -36,10 +38,18 @@ def test_config_schema():
             with pytest.raises(ValidationError) as excinfo:
                 schema.load({})
 
-            assert excinfo.value.messages == {"repositories": ["Missing data for required field."]}
+            assert excinfo.value.messages == {
+                "directories": ["Missing data for required field."],
+                "repositories": ["Missing data for required field."],
+            }
 
             with pytest.raises(ValidationError) as excinfo:
-                schema.load({"repositories": {"my-repo": {"scm": "unknown-scm"}}})
+                schema.load(
+                    {
+                        "directories": {"source": "/src"},
+                        "repositories": {"my-repo": {"scm": "unknown-scm"}},
+                    }
+                )
 
             assert excinfo.value.messages == {
                 "repositories": {
@@ -48,15 +58,24 @@ def test_config_schema():
             }
 
             with pytest.raises(ValidationError) as excinfo:
-                schema.load({"repositories": {"my-repo": {"scm": "unknown-scm", "config": {}}}})
+                schema.load(
+                    {
+                        "directories": {"source": "/src"},
+                        "repositories": {"my-repo": {"scm": "unknown-scm", "config": {}}},
+                    }
+                )
             assert excinfo.value.messages == {
                 "repositories": {"my-repo": {"value": {"scm": ["Unknown SCM: `unknown-scm'"]}}}
             }
 
-            assert schema.load({"repositories": {}}) == {"repositories": {}}
+            assert schema.load({"directories": {"source": "/src"}, "repositories": {}}) == {
+                "directories": {"source": Path("/src")},
+                "repositories": {},
+            }
 
             assert schema.load(
                 {
+                    "directories": {"source": "/src"},
                     "repositories": {
                         "projector": {
                             "scm": "Git",
@@ -66,9 +85,10 @@ def test_config_schema():
                                 }
                             },
                         }
-                    }
+                    },
                 }
             ) == {
+                "directories": {"source": Path("/src")},
                 "repositories": {
                     "projector": {
                         "scm": "Git",
@@ -83,7 +103,7 @@ def test_config_schema():
                             },
                         },
                     }
-                }
+                },
             }
     finally:
         get_scm_tools.cache_clear()
