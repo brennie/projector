@@ -86,7 +86,7 @@ _schema = Schema({
             _validate_repository,
         ),
     },
-    Required('projects'): {},
+    Required('projects'): dict,
 })
 
 

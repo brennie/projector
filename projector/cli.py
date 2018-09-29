@@ -27,6 +27,8 @@ import voluptuous.error
 from ruamel.yaml.error import YAMLError
 
 from projector import get_version_string
+from projector.scm_tools import get_scm_tools
+from projector.scm_tools.base import RepositoryError
 from projector.config import validate_config
 
 
@@ -71,6 +73,53 @@ def cli(ctx, config_path):
 def dump_config(ctx):
     """Dump configuration to standard output."""
     pprint(ctx.obj.config)
+
+
+@cli.command()
+@click.option('all_repos', '-a', '--all', is_flag=True,
+              help='Clone all repositories.')
+@click.argument('repo_name', metavar='REPOSITORY', required=False, default=None)
+@click.pass_context
+def clone(ctx, all_repos, repo_name):
+    """Clone a configured repository."""
+    if all_repos and repo_name:
+        click.echo('projector: can only specify one of --all and REPOSITORY', err=True)
+        raise SystemExit(1)
+    elif not all_repos and not repo_name:
+        click.echo(ctx.get_help())
+        raise SystemExit(0)
+
+    config = ctx.obj.config
+    config_repos = config['repositories']
+    source_dir = Path(config['source_dir']).expanduser().resolve()
+
+    if all_repos:
+        to_clone = config_repos
+    elif repo_name in config_repos:
+        to_clone = [repo_name]
+    else:
+        click.echo(f'projector: unknown repository "{repo_name}"', err=True)
+        raise SystemExit(1)
+
+    for repo_name in to_clone:
+        repo = config_repos[repo_name]
+        scm = repo['scm']
+
+        tool = get_scm_tools()[scm]
+        checkout_path = source_dir.joinpath(*repo_name.split('/'))
+
+        if not checkout_path.exists():
+            checkout_path.mkdir(0o755, parents=True, exist_ok=True)
+        elif not checkout_path.is_dir():
+            click.echo(f'projector: cannot checkout {repo_name}: "{checkout_path}" exists but is not directory',
+                       err=True)
+            continue
+
+        try:
+            tool.checkout(checkout_path, repo)
+        except RepositoryError as e:
+            click.echo(f'projector: {e}', err=True)
+            continue
 
 
 @cli.command()

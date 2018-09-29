@@ -17,9 +17,14 @@
 
 """Base SCM tool definition."""
 
+from pathlib import Path
 from typing import Any, Dict, Union
 
 from voluptuous import Schema
+
+
+class RepositoryError(Exception):
+    """An exception that occurs from interacting with a repository."""
 
 
 class SCMTool:
@@ -34,3 +39,7 @@ class SCMTool:
 
     #: The schema for repository entries.
     repository_schema: Union[Dict[Any, Any], Schema] = None
+
+    @classmethod
+    def checkout(cls, checkout_path: Path, config: Dict[str, Any]):
+        raise NotImplementedError
