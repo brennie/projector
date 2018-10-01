@@ -49,7 +49,9 @@ def test_either_field():
     with pytest.raises(ValidationError) as excinfo:
         schema.load({"field": 123})
 
-    assert excinfo.value.messages == {"field": ["Invalid value."]}
+    assert excinfo.value.messages == {
+        "field": ["Expected type of value to be one of dict, str; got int instead."]
+    }
 
     with pytest.raises(ValidationError) as excinfo:
         schema.load({"field": {"foo": "foo"}})
@@ -61,6 +63,13 @@ def test_either_field():
     }
 
     assert schema.dump({"field": "foo"}) == {"field": "foo"}
+
+    with pytest.raises(ValidationError) as excinfo:
+        schema.dump({"field": 123})
+
+    assert excinfo.value.messages == {
+        "field": ["Expected type of value to be one of dict, str; got int instead."]
+    }
 
 
 def test_either_field_subclass():
