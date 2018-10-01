@@ -122,7 +122,8 @@ class GitRepositorySchema(Schema):
     )
 
     @post_load
-    def make_object(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def _post_load(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Pre-process remotes into Remote objects."""
         remotes = {
             remote_name: Remote.from_raw(remote) for remote_name, remote in data["remotes"].items()
         }
@@ -149,7 +150,7 @@ class GitRepositorySchema(Schema):
         return {"remotes": remotes, "ref": data["ref"], "detach": data["detach"]}
 
     @pre_dump
-    def to_raw(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def _pre_dump(self, data: Dict[str, Any]) -> Dict[str, Any]:
         """Unwrap remotes into their raw representation prior to serialization."""
         return {
             "ref": data["ref"],
