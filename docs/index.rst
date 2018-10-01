@@ -8,15 +8,14 @@ the repositories they depend on and the tool takes care of the rest. In the futu
 will support easy export and import of development environments so that your colleauges can get
 started hacking quickly.
 
-.. toctree::
-   :maxdepth: 1
-   :caption: Contents:
-
-   coderef/index
-
 Indices and tables
 ==================
 
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+.. toctree::
+   :hidden:
+
+   coderef/index
