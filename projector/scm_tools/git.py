@@ -108,9 +108,6 @@ class GitRemoteSchema(Schema):
     url = fields.String(required=True)
     default = fields.Boolean(missing=False)
 
-    def load_data(self, data):
-        return Remote(kind=RemoteKind.EXPLICIT, inner=data)
-
 
 class GitRepositorySchema(Schema):
     """The schema for a Git repository."""
