@@ -1,0 +1,191 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>projector.scm_tools.git &#8212; Projector 0.1.0.dev0 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="projector.config" href="projector.config.html" />
+    <link rel="prev" title="projector.scm_tools.base" href="projector.scm_tools.base.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-projector.scm_tools.git">
+<span id="projector-scm-tools-git"></span><h1>projector.scm_tools.git<a class="headerlink" href="#module-projector.scm_tools.git" title="Permalink to this headline">¶</a></h1>
+<p>Support for the Git SCM tool.</p>
+<dl class="class">
+<dt id="projector.scm_tools.git.Git">
+<em class="property">class </em><code class="descclassname">projector.scm_tools.git.</code><code class="descname">Git</code><a class="headerlink" href="#projector.scm_tools.git.Git" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Git SCM.</p>
+<dl class="attribute">
+<dt id="projector.scm_tools.git.Git.schema">
+<code class="descname">schema</code><a class="headerlink" href="#projector.scm_tools.git.Git.schema" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#projector.scm_tools.git.GitRepositorySchema" title="projector.scm_tools.git.GitRepositorySchema"><code class="xref py py-class docutils literal notranslate"><span class="pre">GitRepositorySchema</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="projector.scm_tools.git.GitRemoteSchema">
+<em class="property">class </em><code class="descclassname">projector.scm_tools.git.</code><code class="descname">GitRemoteSchema</code><span class="sig-paren">(</span><em>only=None</em>, <em>exclude=()</em>, <em>prefix=''</em>, <em>many=False</em>, <em>context=None</em>, <em>load_only=()</em>, <em>dump_only=()</em>, <em>partial=False</em>, <em>unknown=None</em><span class="sig-paren">)</span><a class="headerlink" href="#projector.scm_tools.git.GitRemoteSchema" title="Permalink to this definition">¶</a></dt>
+<dd><p>The schema for a Git remote.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="projector.scm_tools.git.GitRepositorySchema">
+<em class="property">class </em><code class="descclassname">projector.scm_tools.git.</code><code class="descname">GitRepositorySchema</code><span class="sig-paren">(</span><em>only=None</em>, <em>exclude=()</em>, <em>prefix=''</em>, <em>many=False</em>, <em>context=None</em>, <em>load_only=()</em>, <em>dump_only=()</em>, <em>partial=False</em>, <em>unknown=None</em><span class="sig-paren">)</span><a class="headerlink" href="#projector.scm_tools.git.GitRepositorySchema" title="Permalink to this definition">¶</a></dt>
+<dd><p>The schema for a Git repository.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="projector.scm_tools.git.Remote">
+<em class="property">class </em><code class="descclassname">projector.scm_tools.git.</code><code class="descname">Remote</code><span class="sig-paren">(</span><em>kind: projector.scm_tools.git.RemoteKind, inner: Union[str, Dict[str, Any]], _default: bool = False</em><span class="sig-paren">)</span><a class="headerlink" href="#projector.scm_tools.git.Remote" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Git remote.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#projector.scm_tools.git.RemoteKind" title="projector.scm_tools.git.RemoteKind"><code class="xref py py-class docutils literal notranslate"><span class="pre">RemoteKind</span></code></a>:</dt>
+<dd>A description of the kinds of remotes.</dd>
+</dl>
+</div>
+<dl class="classmethod">
+<dt id="projector.scm_tools.git.Remote.from_raw">
+<em class="property">classmethod </em><code class="descname">from_raw</code><span class="sig-paren">(</span><em>value: Union[str, Dict[str, Any]]</em><span class="sig-paren">)</span> &#x2192; projector.scm_tools.git.Remote<a class="headerlink" href="#projector.scm_tools.git.Remote.from_raw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a remote from a raw value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The created remote.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#projector.scm_tools.git.Remote" title="projector.scm_tools.git.Remote">Remote</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="projector.scm_tools.git.Remote.inner">
+<code class="descname">inner</code><em class="property"> = None</em><a class="headerlink" href="#projector.scm_tools.git.Remote.inner" title="Permalink to this definition">¶</a></dt>
+<dd><p>The contents of this remote.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="projector.scm_tools.git.Remote.kind">
+<code class="descname">kind</code><em class="property"> = None</em><a class="headerlink" href="#projector.scm_tools.git.Remote.kind" title="Permalink to this definition">¶</a></dt>
+<dd><p>The kind of remote this is.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="projector.scm_tools.git.RemoteKind">
+<em class="property">class </em><code class="descclassname">projector.scm_tools.git.</code><code class="descname">RemoteKind</code><a class="headerlink" href="#projector.scm_tools.git.RemoteKind" title="Permalink to this definition">¶</a></dt>
+<dd><p>The kind of remote, either implicit or explicit.</p>
+<p>Implicit remotes contain just the URL, while explicit remotes contain key-value pairs.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Projector</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="projector.html">projector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projector.scm_tools.html">projector.scm_tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projector.scm_tools.base.html">projector.scm_tools.base</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">projector.scm_tools.git</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projector.config.html">projector.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projector.fields.html">projector.fields</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">&lt;no title&gt;</a><ul>
+      <li>Previous: <a href="projector.scm_tools.base.html" title="previous chapter">projector.scm_tools.base</a></li>
+      <li>Next: <a href="projector.config.html" title="next chapter">projector.config</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Barret Rennie.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/coderef/python/projector.scm_tools.git.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

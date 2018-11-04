@@ -1,0 +1,220 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>projector &#8212; Projector 0.1.0.dev0 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="projector.scm_tools" href="projector.scm_tools.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="../index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-projector">
+<span id="projector"></span><h1>projector<a class="headerlink" href="#module-projector" title="Permalink to this headline">¶</a></h1>
+<p>Projector versioning data types.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="https://www.python.org/dev/peps/pep-0440/">https://www.python.org/dev/peps/pep-0440/</a>:</dt>
+<dd>The PEP outlining Python package versions.</dd>
+</dl>
+</div>
+<dl class="class">
+<dt id="projector.Release">
+<em class="property">class </em><code class="descclassname">projector.</code><code class="descname">Release</code><a class="headerlink" href="#projector.Release" title="Permalink to this definition">¶</a></dt>
+<dd><p>Release information.</p>
+<dl class="attribute">
+<dt id="projector.Release.kind">
+<code class="descname">kind</code><a class="headerlink" href="#projector.Release.kind" title="Permalink to this definition">¶</a></dt>
+<dd><p>The kind of release this is.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="projector.Release.n">
+<code class="descname">n</code><a class="headerlink" href="#projector.Release.n" title="Permalink to this definition">¶</a></dt>
+<dd><p>The release number.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="projector.ReleaseKind">
+<em class="property">class </em><code class="descclassname">projector.</code><code class="descname">ReleaseKind</code><a class="headerlink" href="#projector.ReleaseKind" title="Permalink to this definition">¶</a></dt>
+<dd><p>The kind of release this is.</p>
+<dl class="attribute">
+<dt id="projector.ReleaseKind.ALPHA">
+<code class="descname">ALPHA</code><em class="property"> = 'a'</em><a class="headerlink" href="#projector.ReleaseKind.ALPHA" title="Permalink to this definition">¶</a></dt>
+<dd><p>An alpha release.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="projector.ReleaseKind.BETA">
+<code class="descname">BETA</code><em class="property"> = 'b'</em><a class="headerlink" href="#projector.ReleaseKind.BETA" title="Permalink to this definition">¶</a></dt>
+<dd><p>A beta release.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="projector.ReleaseKind.DEV">
+<code class="descname">DEV</code><em class="property"> = 'dev'</em><a class="headerlink" href="#projector.ReleaseKind.DEV" title="Permalink to this definition">¶</a></dt>
+<dd><p>A development release.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="projector.ReleaseKind.RELEASE_CANDIDATE">
+<code class="descname">RELEASE_CANDIDATE</code><em class="property"> = 'rc'</em><a class="headerlink" href="#projector.ReleaseKind.RELEASE_CANDIDATE" title="Permalink to this definition">¶</a></dt>
+<dd><p>A release candidate.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="data">
+<dt id="projector.VERSION">
+<code class="descclassname">projector.</code><code class="descname">VERSION</code><em class="property"> = Version(major=0, minor=1, patch=0, release=Release(kind=&lt;ReleaseKind.DEV: 'dev'&gt;, n=0))</em><a class="headerlink" href="#projector.VERSION" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current version of this package.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="projector.Version">
+<em class="property">class </em><code class="descclassname">projector.</code><code class="descname">Version</code><a class="headerlink" href="#projector.Version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Version information.</p>
+<dl class="attribute">
+<dt id="projector.Version.major">
+<code class="descname">major</code><a class="headerlink" href="#projector.Version.major" title="Permalink to this definition">¶</a></dt>
+<dd><p>The major version.</p>
+<p>This is <code class="docutils literal notranslate"><span class="pre">X</span></code> in <code class="docutils literal notranslate"><span class="pre">X.Y.Z</span></code>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="projector.Version.minor">
+<code class="descname">minor</code><a class="headerlink" href="#projector.Version.minor" title="Permalink to this definition">¶</a></dt>
+<dd><p>The minor version.</p>
+<p>This is <code class="docutils literal notranslate"><span class="pre">Y</span></code> in <code class="docutils literal notranslate"><span class="pre">X.Y.Z</span></code>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="projector.Version.patch">
+<code class="descname">patch</code><a class="headerlink" href="#projector.Version.patch" title="Permalink to this definition">¶</a></dt>
+<dd><p>The patch numner.</p>
+<p>This is <code class="docutils literal notranslate"><span class="pre">Z</span></code> in <code class="docutils literal notranslate"><span class="pre">X.Y.Z</span></code>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="projector.Version.release">
+<code class="descname">release</code><a class="headerlink" href="#projector.Version.release" title="Permalink to this definition">¶</a></dt>
+<dd><p>The release information.</p>
+<p>This will be <code class="docutils literal notranslate"><span class="pre">None</span></code> if and only if it is a released version.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="projector.Version.to_short">
+<code class="descname">to_short</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#projector.Version.to_short" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a short (<code class="docutils literal notranslate"><span class="pre">X.Y</span></code>) version string.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Projector</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">projector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projector.scm_tools.html">projector.scm_tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projector.scm_tools.base.html">projector.scm_tools.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projector.scm_tools.git.html">projector.scm_tools.git</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projector.config.html">projector.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projector.fields.html">projector.fields</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">&lt;no title&gt;</a><ul>
+      <li>Previous: <a href="../index.html" title="previous chapter">&lt;no title&gt;</a></li>
+      <li>Next: <a href="projector.scm_tools.html" title="next chapter">projector.scm_tools</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Barret Rennie.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/coderef/python/projector.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

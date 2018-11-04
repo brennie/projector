@@ -1,0 +1,5 @@
+projector.config
+================
+
+.. automodule:: projector.config
+   :members:

@@ -1,0 +1,5 @@
+projector.scm_tools.git
+=======================
+
+.. automodule:: projector.scm_tools.git
+   :members:
